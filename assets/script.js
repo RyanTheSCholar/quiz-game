@@ -66,7 +66,7 @@ var nextBtn = document.createElement("button");
 // var answerLi3 = document.createElement("li");
 // var answerLi4 = document.createElement("li");
 var index = 0;
-var timerCount = 30;
+var timerCount = 45;
 var timer;
 var initials;
 // appending section
@@ -91,17 +91,36 @@ function correctAnswer(e) {
     endGame();
     // return;
     lastPage();
+    initialsForm();
   } else {
     askQuestions();
   }
+}
+function initialsForm(){
+    initForm = document.createElement("input");
+    initText = document.createElement("textarea");
+    endForm = document.createElement("form")
+    endForm.setAttribute("style", "display: flex;  height: 25px; justify-content: center;")
+    initForm.setAttribute("type", "submit");
+    initForm.setAttribute("value", "submit");
+    endForm.appendChild(initText);
+    endForm.appendChild(initForm);
+    main.appendChild(endForm);
+    console.log(endForm.textContent);
+    var currentUser = {
+        initials: endForm,
+        score: timerCount
+    }
+    endGameArr.push(currentUser);
 }
 function lastPage() {
   main.innerHTML = "";
   timerHeader.innerHTML = "";
   gameover = document.createElement("h1");
-  initForm = document.createElement("input");
-  initForm = setAttribute("type", "form");
   new1 = document.createElement("p");
+  if(timerCount<0){
+    timerCount=0;
+  }
   new1.textContent = timerCount;
   gameover.textContent = "Game Over";
   gameover.setAttribute(
@@ -127,6 +146,7 @@ function startTimer() {
     if(timerCount <=  0 || index>=myQuestions.length){
         clearInterval(timer);
         lastPage();
+        initialsForm();
     }
     // if (timerCount <= 0){
     //     lastPage();
@@ -135,7 +155,7 @@ function startTimer() {
   timerHeader.appendChild(timerElement);
   timerHeader.setAttribute(
     "style",
-    "display: flex; justify-content: space-between;"
+    "display: flex;"
   );
   if (index >= myQuestions.length) {
     clearInterval(timer);
@@ -153,11 +173,11 @@ function endGame() {
     // todo get from localstorage before I set
     // parsing is for getting
     // stringify is setting
-    var currentUser = {
-        initials: "initials",
-        score: timerCount
-    }
-    endGameArr.push(currentUser);
+    // var currentUser = {
+    //     initials: "initials",
+    //     score: timerCount
+    // }
+    // endGameArr.push(currentUser);
   }
 
   // exampleArray = [{"RJ", 20}, {"CD", 35}]
@@ -171,22 +191,23 @@ function endGame() {
 function askQuestions() {
   main.innerHTML = "";
   var questContainer = document.createElement("div");
+//   main.setAttribute("style", "display: flex; flex-direction: row; margin: 1rem auto;")
   main.appendChild(questContainer);
   questContainer.setAttribute("class", "container");
   questContainer.setAttribute(
     "style",
-    "display: flex; flex-direction: column; align-items: center; text-align: left; "
+    "display: flex; margin: 2rem auto; flex-direction: column; align-items: center; justify-content: center;"
   );
   var showQuestion = document.createElement("h2");
   showQuestion.textContent = myQuestions[index].question;
   questContainer.appendChild(showQuestion);
-  showQuestion.setAttribute("style", "display: flex; flex-direction: column; ");
+    //  showQuestion.setAttribute("style", "display: flex; flex-direction: column; ");
   // questContainer.setAttribute("style", "display: flex; text-align: left; margin: 1rem auto; padding-top: 0%;")
   for (let i = 0; i < 4; i++) {
     var answer = document.createElement("button");
     answer.setAttribute(
       "style",
-      "background-color: blueviolet; width: 200px; margin: .5%;"
+      "background-color: blueviolet; width: 250px; margin: .5%;"
     );
     answer.textContent = myQuestions[index].answers[i];
     answer.addEventListener("click", (e) => {
@@ -200,25 +221,28 @@ function askQuestions() {
 }
 // padding: 2%; margin-left: 1%; margin-right: 1%;
 function changeToQuestions() {
-  document.querySelector(".content").hidden = true;
-  document
-    .querySelector(".content")
-    .setAttribute(
-      "style",
-      "height: 1px; width: 1px; position: absolute; left: 2000px;"
-    );
+    
+  document.querySelector(".content").innerHTML = '';
+//   document
+//     .querySelector(".content")
+//     .setAttribute(
+//       "style",
+//       "height: 1px; width: 1px; position: absolute; left: 2000px;"
+//     );
   document.querySelector(".game-name").hidden = true;
   document.querySelector(".rules").hidden = true;
   document.querySelector(".start").hidden = true;
   document.querySelector(".start-text").hidden = true;
   start.setAttribute("style", "display: none;");
-  startTimer();
+  
 }
 console.log(window.start);
 start.addEventListener("click", function (event) {
   event.stopPropagation();
-
-  changeToQuestions();
+  document.querySelector(".content").innerHTML="";
+  document.querySelector(".content").hidden = true;
+  startTimer();
+//   changeToQuestions();
 
   askQuestions(index);
 });
